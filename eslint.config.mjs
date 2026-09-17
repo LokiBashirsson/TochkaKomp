@@ -1,0 +1,33 @@
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { FlatCompat } from '@eslint/eslintrc';
+
+const compat = new FlatCompat({ baseDirectory: dirname(fileURLToPath(import.meta.url)) });
+
+export default [
+  ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
+  {
+    ignores: ['.next/**', 'node_modules/**', 'playwright-report/**', 'test-results/**'],
+  },
+  {
+    rules: {
+      '@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              // Feature-Sliced Design: layers may only import downwards.
+              group: ['@/app/*'],
+              message: 'Lower layers must not import from the app layer.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+];

@@ -1,0 +1,560 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+/* ==========================================================================
+   TochkaComp — design tokens
+
+   Direction: "Каспийская ночь и медь".
+   The base is a blue-leaning graphite (Makhachkala at night over the Caspian);
+   the accent is copper — the metal actually inside every heatsink, PCB trace
+   and cooler on the shelves, and the metal Dagestani craftsmen have worked for
+   centuries. Copper (warm) is balanced by a single cool Caspian teal.
+   Everything else stays quiet so those two do the talking.
+   ========================================================================== */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+
+  /* -- Raw palette -------------------------------------------------------- */
+  --tc-void: #eceef2;
+  --tc-ink: #f6f7f9;
+  --tc-surface: #ffffff;
+  --tc-surface-2: #f0f2f5;
+  --tc-chalk: #0a0e14;
+  --tc-muted: #55606f;
+  --tc-line: rgb(10 14 20 / 0.1);
+  --tc-line-strong: rgb(10 14 20 / 0.16);
+
+  --tc-copper: #c2551f;
+  --tc-copper-soft: #e1703a;
+  --tc-ember: #d98b1f;
+  --tc-caspian: #16788f;
+
+  --tc-success: #17795a;
+  --tc-danger: #c62f45;
+
+  --tc-glass: rgb(255 255 255 / 0.72);
+  --tc-glass-line: rgb(10 14 20 / 0.09);
+  --tc-glow: rgb(194 85 31 / 0.18);
+  --tc-shadow-color: 214 60% 8%;
+
+  /* -- Semantic ----------------------------------------------------------- */
+  --background: var(--tc-ink);
+  --foreground: var(--tc-chalk);
+  --card: var(--tc-surface);
+  --card-foreground: var(--tc-chalk);
+  --popover: var(--tc-surface);
+  --popover-foreground: var(--tc-chalk);
+  --primary: var(--tc-copper);
+  --primary-foreground: #fff8f3;
+  --secondary: var(--tc-surface-2);
+  --secondary-foreground: var(--tc-chalk);
+  --muted: var(--tc-surface-2);
+  --muted-foreground: var(--tc-muted);
+  --accent: var(--tc-caspian);
+  --accent-foreground: #f2fbfd;
+  --destructive: var(--tc-danger);
+  --border: var(--tc-line);
+  --input: var(--tc-line-strong);
+  --ring: var(--tc-copper);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --tc-void: #05070a;
+  --tc-ink: #080b10;
+  --tc-surface: #0d121a;
+  --tc-surface-2: #151b26;
+  --tc-chalk: #eef2f7;
+  --tc-muted: #8b95a6;
+  --tc-line: rgb(255 255 255 / 0.08);
+  --tc-line-strong: rgb(255 255 255 / 0.14);
+
+  --tc-copper: #e1703a;
+  --tc-copper-soft: #f2915f;
+  --tc-ember: #f7b95c;
+  --tc-caspian: #35a9c6;
+
+  --tc-success: #3fbf8f;
+  --tc-danger: #f0546a;
+
+  --tc-glass: rgb(255 255 255 / 0.045);
+  --tc-glass-line: rgb(255 255 255 / 0.1);
+  --tc-glow: rgb(225 112 58 / 0.34);
+  --tc-shadow-color: 214 70% 2%;
+
+  --primary-foreground: #180a03;
+  --accent-foreground: #041318;
+}
+
+@theme inline {
+  /* -- Colour ------------------------------------------------------------- */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-void: var(--tc-void);
+  --color-ink: var(--tc-ink);
+  --color-surface: var(--tc-surface);
+  --color-surface-2: var(--tc-surface-2);
+  --color-copper: var(--tc-copper);
+  --color-copper-soft: var(--tc-copper-soft);
+  --color-ember: var(--tc-ember);
+  --color-caspian: var(--tc-caspian);
+  --color-success: var(--tc-success);
+  --color-danger: var(--tc-danger);
+
+  /* -- Type --------------------------------------------------------------- */
+  --font-display: var(--font-unbounded), 'Unbounded', system-ui, sans-serif;
+  --font-sans: var(--font-manrope), 'Manrope', system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Fluid ramp — every step is clamp()ed so nothing needs breakpoint overrides. */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1.4;
+  --text-2xs--letter-spacing: 0.08em;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.8125rem;
+  --text-sm--line-height: 1.6;
+  --text-base: 0.9375rem;
+  --text-base--line-height: 1.7;
+  --text-lg: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg--line-height: 1.65;
+  --text-xl: clamp(1.125rem, 1rem + 0.6vw, 1.375rem);
+  --text-xl--line-height: 1.5;
+  --text-2xl: clamp(1.375rem, 1.15rem + 1.1vw, 1.875rem);
+  --text-2xl--line-height: 1.28;
+  --text-3xl: clamp(1.75rem, 1.35rem + 2vw, 2.75rem);
+  --text-3xl--line-height: 1.14;
+  --text-4xl: clamp(2.25rem, 1.5rem + 3.6vw, 4rem);
+  --text-4xl--line-height: 1.06;
+  --text-5xl: clamp(2.75rem, 1.4rem + 6.2vw, 6rem);
+  --text-5xl--line-height: 0.98;
+  --text-6xl: clamp(3.25rem, 0.9rem + 10vw, 8.5rem);
+  --text-6xl--line-height: 0.9;
+
+  /* -- Shape & depth ------------------------------------------------------ */
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.625rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2.25rem;
+
+  --shadow-soft: 0 1px 2px hsl(var(--tc-shadow-color) / 0.16), 0 8px 24px -12px
+    hsl(var(--tc-shadow-color) / 0.28);
+  --shadow-lift: 0 2px 4px hsl(var(--tc-shadow-color) / 0.18), 0 24px 56px -20px
+    hsl(var(--tc-shadow-color) / 0.42);
+  --shadow-float: 0 40px 90px -32px hsl(var(--tc-shadow-color) / 0.6);
+
+  /* -- Motion ------------------------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-marquee: marquee 42s linear infinite;
+  --animate-drift: drift 22s ease-in-out infinite;
+  --animate-pulse-trace: pulse-trace 3.2s var(--ease-in-out-quart) infinite;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-rise: rise 0.7s var(--ease-out-expo) both;
+  --animate-accordion-down: accordion-down 0.35s var(--ease-out-expo);
+  --animate-accordion-up: accordion-up 0.28s var(--ease-in-out-quart);
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(3%, -4%, 0) scale(1.06);
+  }
+  66% {
+    transform: translate3d(-3%, 3%, 0) scale(0.96);
+  }
+}
+@keyframes pulse-trace {
+  0% {
+    stroke-dashoffset: 220;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -220;
+    opacity: 0;
+  }
+}
+@keyframes shimmer {
+  to {
+    background-position: 200% 0;
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+  }
+
+  /* Lenis drives scrolling; native smooth-scroll would fight it. */
+  html:not(.lenis-off) {
+    scroll-behavior: auto;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    font-feature-settings: 'ss01', 'cv01', 'tnum' 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+  }
+
+  ::selection {
+    background: var(--tc-copper);
+    color: var(--primary-foreground);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--tc-line-strong);
+    border-radius: 99px;
+    border: 3px solid var(--background);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--tc-copper);
+  }
+
+  /* Numerals in prices, specs and counters must never jitter. */
+  [data-numeric] {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+@utility container-page {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 88rem;
+  padding-inline: 1.25rem;
+
+  @media (width >= 48rem) {
+    padding-inline: 2.5rem;
+  }
+  @media (width >= 80rem) {
+    padding-inline: 4rem;
+  }
+}
+
+/* Section rhythm — one place, so vertical spacing can never drift. */
+@utility section {
+  padding-block: clamp(4.5rem, 3rem + 7vw, 9.5rem);
+}
+@utility section-tight {
+  padding-block: clamp(3rem, 2rem + 4vw, 6rem);
+}
+
+/* The house glass: translucent fill + hairline + a top inner highlight so the
+   edge catches light the way a brushed panel does. */
+@utility glass {
+  background-color: var(--tc-glass);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid var(--tc-glass-line);
+  box-shadow:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.07),
+    var(--shadow-soft);
+}
+
+@utility glass-strong {
+  background-color: color-mix(in srgb, var(--card) 82%, transparent);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid var(--tc-glass-line);
+  box-shadow:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.08),
+    var(--shadow-lift);
+}
+
+/* Copper edge that appears on hover — the "current is flowing" cue. */
+@utility edge-copper {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      140deg,
+      var(--tc-copper) 0%,
+      transparent 38%,
+      transparent 62%,
+      var(--tc-caspian) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-out-expo);
+    pointer-events: none;
+  }
+
+  &:hover::after,
+  &:focus-within::after {
+    opacity: 1;
+  }
+}
+
+@utility text-gradient-copper {
+  background-image: linear-gradient(
+    100deg,
+    var(--tc-chalk) 0%,
+    var(--tc-copper-soft) 46%,
+    var(--tc-ember) 72%,
+    var(--tc-chalk) 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Ambient mesh — three offset radial fields, drifting slowly. */
+@utility mesh-field {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background:
+    radial-gradient(38rem 30rem at 18% 12%, var(--tc-glow), transparent 62%),
+    radial-gradient(
+      34rem 26rem at 82% 28%,
+      color-mix(in srgb, var(--tc-caspian) 26%, transparent),
+      transparent 64%
+    ),
+    radial-gradient(
+      44rem 34rem at 50% 96%,
+      color-mix(in srgb, var(--tc-ember) 16%, transparent),
+      transparent 68%
+    );
+  filter: blur(24px);
+  animation: var(--animate-drift);
+}
+
+/* Fine grain over gradients kills banding and reads as printed stock. */
+@utility grain {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");
+  }
+}
+
+/* Hairline rule that fades at both ends — used between sections. */
+@utility rule-fade {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, transparent, var(--tc-line-strong) 22%, var(--tc-line-strong) 78%, transparent);
+}
+
+/* Eyebrow labels use spec-sheet notation, never decorative 01 / 02 / 03. */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+@utility skeleton {
+  background-image: linear-gradient(
+    90deg,
+    var(--muted) 0%,
+    color-mix(in srgb, var(--muted) 60%, var(--card)) 50%,
+    var(--muted) 100%
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+  border-radius: var(--radius-sm);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Horizontal rails clamp to the page gutter but bleed to the viewport edge. */
+@utility rail {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scroll-padding-inline: 1.25rem;
+  padding-inline: 1.25rem;
+  padding-block: 0.5rem;
+
+  & > * {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+  }
+
+  @media (width >= 48rem) {
+    scroll-padding-inline: 2.5rem;
+    padding-inline: 2.5rem;
+  }
+  @media (width >= 80rem) {
+    scroll-padding-inline: 4rem;
+    padding-inline: 4rem;
+  }
+}
+
+/* ==========================================================================
+   Third-party surface fixes
+   ========================================================================== */
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* SplitType output — set before GSAP takes over so there is no flash. */
+.split-line {
+  overflow: hidden;
+  display: block;
+}
+.split-word {
+  display: inline-block;
+  will-change: transform;
+}
